@@ -1,0 +1,106 @@
+https://medium.com/@rajat01221/an-in-depth-exploration-of-data-compression-algorithms-c409ec43f1e5
+
+https://www.fastpix.io/blog/what-is-run-length-encoding
+
+https://en.wikipedia.org/wiki/Data_compression 
+- Not best source but interestinginfo
+
+---------------------------
+
+Need a lossless compression algorithm to modify a buffer with N bytes.
+
+Need in place modification of the buffer.
+
+Assignment declares that there will often be repeated values in SERIES
+
+I will also probably be writing in C for efficient and direct access to the memory in the buffer, should be simple.
+-- Also compile with -wall and other flags to catch errors
+-- Use valgrind for mem issues (Shouldnt be any)
+
+Actual specifications:
+Each byte will contain a number from 0 to 127 (0x00 to 0x7F)
+It is common for the data in the buffer to have the same value 
+repeated in the series.
+The compressed data will need to be decompressable.
+
+Look at implementing simple compression algorithm that counts each repeated 
+value in series, and adds a byte that describes the count and then the byte 
+that that count corresponds to (run length encoding)
+
+Ie: orig =  [1 1 1 1 4 4 4 3 3 3 4 3 3 3 3 9 9 9 8 9 0 0 0]
+
+Would be [4 1 3 4 3 3 1 4 4 3 3 9 1 8 1 9 3 0]
+
+This would compress from 23 to 18 bytes which is ~21.7% size reduction. This is a very ideal case though. Worst case is when all bytes have different values, or there aren't any in series, this would return a longer buffer.
+
+Ie: [1 2 3 4 5 6 7 8]
+
+Would be [1 1 1 2 1 3 1 4 1 5 1 6 1 7 1 8]
+
+This worst case scenario doubles the buffer size which is not what we want.
+
+If this is the case, and the buffer would be longer, would we have to measure that and just return back the original buffer so as not to add over the original allocated mem?
+
+If we do this though, and then call for a decompression algorithm on it, it would be incorrect, so we would need a way to flag if it has been compressed or not. How do we assign a flag like that when we are given a buffer of size N and don't want to increase N. How could we flag a non-compressed buffer that we don't want to try and decompress?
+
+I can look at adding a flag byte to the front of compressed code, that contains a number > 127 as that is the limit for buffer data. This would mean the check for if compression is worth it is if it compresses by > 1 byte. The compressed data minus the flag would have to be at least 2 lower to be worth compressing.
+
+
+
+WHILE WRITING DESIGN DECISIONS:
+
+Using unsigned char vs char:
+
+
+How to mark prior/current byte:
+-using var vs just straight comparison
+
+
+How to reset the iteration when modifying buffers, so we are always inserting data in the right points:
+-Tracking where last insert was, as well as where next unmodified value was.
+
+    ***This brings up another issue, making sure we never overwrite new data with old data. ie esnure 1 2 3 4 doesnt immediately become 1 1 3 4
+
+Need to make sure we dont overwrite unread data
+-two pass vs temp buffer approach.
+If I decide to two pass struct approach, use the 379 lab slides as an example
+
+Going forward with two pass approach, first is to record all values and corresponding counts somewhere, Check against this to make sure it is implementable, then actually do the compression. This is better than just duping our buffer and reading from there -> modifying actual buffer before we are sure that it will actually compress it. Having the values and numbers stored somewhere will 
+
+
+***How should we display the count of each byte? If we do this as a byte, it will be limited to a count of 255. Is this okay?
+
+USED SIZE_T instead of INT.
+Size_t is just normal for sizing vars and returns, also can hold more than int
+
+-------------------------------------
+
+ISSUES I RAN IN TO/HOW I SOLVED THEM:
+
+--Compressing over initial size
+
+--Marking as compressed vs unchanged
+
+--overwriting unread values
+
+--strdup vs struct approach. (Determining size before modifying buffer)
+
+--Originally handled first case inside loop which led to initializing j to -1 and comparing int to size_t, fixed this by just handling the first buffer value outside of the loop.
+
+Minor bugs. 
+--Ran into some things like accidentally starting count 1 higher/not proper iteration logic throughout the loops
+
+--Accidentally deleted my c code, by running make clean on OBJS
+
+--Was using < total_value_count in my 2nd pass loop instead of compressed size, 
+so stopped iterating early and left half the buffer original
+
+
+
+
+----------------------------------------------------------------------
+WEAKNESSES:
+
+--Currently cant define counts above 255 for one value
+
+--Allocates on stack, so if buffer is very large, may allocate too much on stack.
