@@ -50,15 +50,15 @@ size_t byte_compress(unsigned char *buff_ptr, size_t buff_size) {
 
     prior = value_array[0].value = buff_ptr[0];
     value_array[0].count = 1;
-
     size_t total_value_count = 1;
+    
     size_t max_value_count = 255;
     int max_count_flag = 0;
 
     for (size_t i = 1, j = 0; i < buff_size; i++) {
         current = buff_ptr[i];
         if (current != prior || max_count_flag) {
-            max_count_flag = 0;
+            if (max_count_flag) max_count_flag = 0;
             ++j;
             value_array[j].value = current;
             value_array[j].count = 1;
