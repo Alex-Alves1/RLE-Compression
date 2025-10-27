@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
+#include <string.h>
 
 //Write in 1 or 2 files?
 
@@ -159,11 +160,10 @@ int main(int argc, char **argv) {
     * LIST ADVANTAGES/DESIGN REASON HERE
     */
     /**/
-    unsigned char data_ptr[] = {0x03, 0x74, 0x04, 0x04, 0x04, 0x35, 0x35, 0x64,
-    0x64, 0x64, 0x64, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x56, 0x45, 0x56, 0x56, 0x56, 0x09, 0x09, 0x09};
+    unsigned char original_buffer[] = {0x00, 0x00, 0x00, 0x10, 0x10, 0x7F, 0x7F, 0x7F, 0x7F};
 
-    size_t data_size = 24;
+    unsigned char data_ptr[] = {0x00, 0x00, 0x00, 0x10, 0x10, 0x7F, 0x7F, 0x7F, 0x7F};
+    size_t data_size = 9;
     
     /*
     unsigned char data_ptr[] = {0x00, 0x00, 0x33, 0x33, 0x33, 0x33, 0x33, 0x00, 0x00, 0x00, 0x00};
@@ -188,7 +188,8 @@ int main(int argc, char **argv) {
     for (size_t i = 0; i < new_size; i++) {
             printf("%u ", data_ptr[i]);
     }
-    printf("]\nCompressed size: %zu. This is ~%.2f percent reduction in size\n", new_size , (1 - (double) new_size/ (double) data_size) * 100);
+    printf("]\nCompressed size: %zu. This is ~%.2f percent reduction in size\n", new_size , (data_size ? (1 - (double) new_size / (double) data_size) : 0) * 100);
+
 
     printf("\nDECOMPRESSION STARTING:\n");
 
@@ -199,8 +200,17 @@ int main(int argc, char **argv) {
     for (size_t i = 0; i < final_size; i++) {
             printf("%u ", data_ptr[i]);
     }
-
-    printf("]\nDecompressed size: %zu. This is ~%.2f percent reduction in size\n", final_size , (1 - (double) final_size/ (double) data_size) * 100);
+    printf("]\nDecompressed size: %zu. This is ~%.2f percent reduction in size\n", final_size , (data_size ? (1 - (double) final_size / (double) data_size) : 0) * 100);
 
     printf("\n");
+
+
+    //Make sure both buffers are still equal after both operations
+    if (final_size == data_size) {
+        if (memcmp(original_buffer, data_ptr, final_size) == 0) printf("Same final size and bytes.\n");
+        else printf("Different Final Bytes");
+    }
+    else printf("Different final sizes\n");
+    //How to format accurately
+    //printf("0x%02X\n", 0x0F);
 }
