@@ -21,3 +21,18 @@ size_t data_size = 0;
 Test Case 5: Repeated Values, but compressed size w/ flag = original size
 unsigned char data_ptr[] = {0x00, 0x00, 0x00, 0x10, 0x10, 0x7F, 0x7F, 0x0F, 0x0F};
 size_t data_size = 9;
+
+Test Case 6: Buffer with a run length > 255 (more than a count byte can hold)
+unsigned char data_ptr[1000]; 
+memset(data_ptr, 0x7F, sizeof data_ptr);
+size_t data_size = 1000;
+
+Test Case 7: lower limit before splitting run lengths
+unsigned char data_ptr[255]; 
+memset(data_ptr, 0x7F, sizeof data_ptr);
+size_t data_size = 255;
+
+Test Case 8: Right after splitting run lengths
+unsigned char data_ptr[256]; 
+memset(data_ptr, 0x7F, sizeof data_ptr);
+size_t data_size = 256;

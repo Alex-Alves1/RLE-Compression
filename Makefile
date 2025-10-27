@@ -1,11 +1,11 @@
 CC = gcc
-CFLAGS = -Wall
-TARGET = annotated_compression
+CFLAGS = -Wall -Wextra
+TARGET = compression_testing
 
 all: $(TARGET)
 
-$(TARGET): clean
-	$(CC) $(CFLAGS) $(TARGET).c -o $(TARGET)
+$(TARGET):
+	$(CC) $(CFLAGS) $(TARGET).c run_length_encoding.c -o $(TARGET)
 
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -f $(TARGET)

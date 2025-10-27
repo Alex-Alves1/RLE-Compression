@@ -105,8 +105,12 @@ so stopped iterating early and left half the buffer original
 ----------------------------------------------------------------------
 WEAKNESSES:
 
---Currently cant define counts above 255 for one value
+--Currently cant define counts above 255 for one value FIXED
 
---Allocates on stack, so if buffer is very large, may allocate too much on stack.
+--Allocates on stack, so if buffer is very large, may allocate too much on stack. FIXED But now a potential improvement is to revert this if the buffer lengths are guarenteed to be small.
 
---The decompression algorithm writes over the length of the compressed buffer, it just decompresses and assumes that it the allocated memory for the original buffer hasnt been reassigned
+--The decompression algorithm writes over the length of the compressed buffer, it just decompresses and assumes that it the allocated memory for the original buffer hasnt been reassigned FIXED
+
+--Currently compress and decompress return a buffer size regardless of whether they succesfully compressed or decompressed the given buffer. This follows with the assignment, but could potentially be changed for clearer functionality to return clear error values in those cases.
+
+--Placed struct definition in each function to be safe, wasnt sure how the functions would be tested. Could be placed back out in the program
