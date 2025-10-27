@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall
-TARGET = compression
+TARGET = annotated_compression
 
 all: $(TARGET)
 

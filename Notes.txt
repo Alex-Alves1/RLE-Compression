@@ -69,9 +69,12 @@ Going forward with two pass approach, first is to record all values and correspo
 
 
 ***How should we display the count of each byte? If we do this as a byte, it will be limited to a count of 255. Is this okay?
+    --CAN MAYBE FIX BY SPLITTING IT into multiple. BE AWARE THIS MAY CHANGE SIZING, LOOK INTO IT
 
 USED SIZE_T instead of INT.
 Size_t is just normal for sizing vars and returns, also can hold more than int
+
+//Should the decompression modify the original memory back? This shouldnt result in any errors since it would decompress back to OG size. It just seems weird because we would be accessing memory past where the current buffer size is.
 
 -------------------------------------
 
@@ -95,6 +98,7 @@ Minor bugs.
 --Was using < total_value_count in my 2nd pass loop instead of compressed size, 
 so stopped iterating early and left half the buffer original
 
+--bug where when I was decompressig, was accidentally rewriting to same 4 bytes for each count.
 
 
 
@@ -104,3 +108,5 @@ WEAKNESSES:
 --Currently cant define counts above 255 for one value
 
 --Allocates on stack, so if buffer is very large, may allocate too much on stack.
+
+--The decompression algorithm writes over the length of the compressed buffer, it just decompresses and assumes that it the allocated memory for the original buffer hasnt been reassigned
