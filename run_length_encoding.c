@@ -31,7 +31,10 @@
  * 
  * @return - The number of valid bytes in the buffer after function completion
  **/
-size_t byte_compress(unsigned char *buff_ptr, size_t buff_size) {
+size_t byte_compress(
+    unsigned char *buff_ptr,
+    size_t buff_size
+) {
     struct value_info {
     unsigned char value;
     size_t count;  
@@ -51,7 +54,7 @@ size_t byte_compress(unsigned char *buff_ptr, size_t buff_size) {
     prior = value_array[0].value = buff_ptr[0];
     value_array[0].count = 1;
     size_t total_value_count = 1;
-    
+
     size_t max_value_count = 255;
     int max_count_flag = 0;
 
@@ -114,11 +117,15 @@ size_t byte_compress(unsigned char *buff_ptr, size_t buff_size) {
  * 
  * @param buff_ptr - A pointer to the input buffer that will be decompressed
  * @param buff_size - The length of the input buffer
- * @param buff_size - The capacity allocated to the buff_ptr
+ * @param buff_capacity - The capacity currently allocated to the buff_ptr
  * 
  * @return - The number of valid bytes in the buffer after function completion
  **/
-size_t byte_decompress(unsigned char *buff_ptr, size_t buff_size, size_t buff_capacity) {
+size_t byte_decompress(
+    unsigned char *buff_ptr, 
+    size_t buff_size, 
+    size_t buff_capacity
+) {
     struct value_info {
     unsigned char value;
     size_t count;
