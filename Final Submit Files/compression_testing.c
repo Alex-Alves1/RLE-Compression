@@ -130,7 +130,8 @@ int main(int argc, char **argv) {
 
         {"Case 9: 16 bytes Varying and repeating run lengths. Compresses" 
             "\nPassed a smaller than original capacity during decompression."
-            "\nIt will not decompress the compressed buffer.", test9, sizeof test9, expected_test9, sizeof expected_test9, 5},
+            "\nIt will not decompress the compressed buffer.", test9, sizeof 
+            test9, expected_test9, sizeof expected_test9, 5},
 
         {"Case 10: Single byte.\nDoes not compress.", test10, sizeof test10, 
             expected_test10, sizeof expected_test10, sizeof test10},
