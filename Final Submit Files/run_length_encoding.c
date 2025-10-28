@@ -24,7 +24,8 @@
  *   return will be compressed_size
  * - If compressed_size >= buff_size the buffer will not be modified and the 
  *   return will be buff_size
- * - If an allocation error is encountered, the buffer will not be modified and *   the return will be buff_size
+ * - If an allocation error is encountered, the buffer will not be modified and
+ *   the return will be buff_size
  * 
  * @param buff_ptr - A pointer to the input buffer that will be compressed
  * @param buff_size - The length of the input buffer
@@ -115,7 +116,8 @@ size_t byte_compress(
  *   return will be decompressed_size
  * - If decompressed_size > buff_capacity the buffer will not be modified and 
  *   the return will be buff_size
- * - If an allocation error is encountered, the buffer will not be modified and *   the return will be buff_size
+ * - If an allocation error is encountered, the buffer will not be modified and
+ *   the return will be buff_size
  * 
  * @param buff_ptr - A pointer to the input buffer that will be decompressed
  * @param buff_size - The length of the input buffer

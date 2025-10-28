@@ -92,10 +92,13 @@ int main(int argc, char **argv) {
     unsigned char expected_test15[] = {0x04, 0x02, 0x04, 0x02, 0x04, 0x02};
     // Test Case 16: Large buffer with varying and repeating run lengths.
     unsigned char test16[4000] = {[0] = 0x00, [1 ... 200] = 0x7F, 
-        [201 ... 573] = 0x0A, [574 ... 583] = 0x70, [584 ... 883] = 0x7F,[884 ... 885] = 0x02, [886 ... 3999] = 0x0F} ;
+        [201 ... 573] = 0x0A, [574 ... 583] = 0x70, [584 ... 883] = 0x7F, 
+        [884 ... 885] = 0x02, [886 ... 3999] = 0x0F} ;
     unsigned char expected_test16[] = {0xFF, 0x01, 0x00, 0xC8, 0x7F, 0xFF, 
         0x0A, 0x76, 0x0A, 0x0A, 0x70, 0xFF, 0x7F, 0x2D, 0x7F, 0x02, 0x02, 
-        0xFF, 0x0F, 0xFF, 0x0F, 0xFF, 0x0F, 0xFF, 0x0F, 0xFF, 0x0F, 0xFF, 0x0F, 0xFF, 0x0F, 0xFF, 0x0F, 0xFF, 0x0F, 0xFF, 0x0F, 0xFF, 0x0F, 0xFF, 0x0F, 0x36, 0x0F};  
+        0xFF, 0x0F, 0xFF, 0x0F, 0xFF, 0x0F, 0xFF, 0x0F, 0xFF, 0x0F, 0xFF, 0x0F,
+        0xFF, 0x0F, 0xFF, 0x0F, 0xFF, 0x0F, 0xFF, 0x0F, 0xFF, 0x0F, 0xFF, 0x0F, 
+        0x36, 0x0F};  
 
     struct test_case cases[] = {
         {"Case 1: Given assignment example.\nCompresses.", test1, sizeof test1, 
@@ -110,7 +113,8 @@ int main(int argc, char **argv) {
         {"Case 4: Empty buffer.\nDoes not compress.", test4, 0, 
             expected_test4, 0, 0},
 
-        {"Case 5: 9 bytes mixed run lengths, compressed size = original size.\nDoes not compress.", test5, sizeof test5, expected_test5, 
+        {"Case 5: 9 bytes mixed run lengths, compressed size = original size."
+            "\nDoes not compress.", test5, sizeof test5, expected_test5, 
             sizeof expected_test5, sizeof test5},
 
         {"Case 6: Run length >> count limit (1000).\nCompresses.", test6, sizeof 
@@ -124,13 +128,15 @@ int main(int argc, char **argv) {
             test8, sizeof test8, expected_test8, sizeof expected_test8, 
             sizeof test8},
 
-        {"Case 9: 16 bytes Varying and repeating run lengths. Compresses.\nPassed a smaller than original capacity during decompression.\nIt will not decompress the compressed buffer.", test9, sizeof test9, 
-            expected_test9, sizeof expected_test9, 5},
+        {"Case 9: 16 bytes Varying and repeating run lengths. Compresses" 
+            "\nPassed a smaller than original capacity during decompression."
+            "\nIt will not decompress the compressed buffer.", test9, sizeof test9, expected_test9, sizeof expected_test9, 5},
 
         {"Case 10: Single byte.\nDoes not compress.", test10, sizeof test10, 
             expected_test10, sizeof expected_test10, sizeof test10},
 
-        {"Case 11: Two duplicate bytes.\nDoes not compress.", test11, sizeof test11, expected_test11, sizeof expected_test11, sizeof test11},
+        {"Case 11: Two duplicate bytes.\nDoes not compress.", test11, sizeof 
+            test11, expected_test11, sizeof expected_test11, sizeof test11},
 
         {"Case 12: Three of the same byte.\nDoes not compress.", test12, sizeof 
             test12, expected_test12, sizeof expected_test12, sizeof test12},
@@ -146,7 +152,8 @@ int main(int argc, char **argv) {
             sizeof test15, expected_test15, sizeof expected_test15, 
             sizeof test15},
         
-        {"Case 16: Large buffer (4000) with varying large run lengths.\nCompresses.", test16, sizeof test16, expected_test16, 
+        {"Case 16: Large buffer (4000) with varying large run lengths."
+            "\nCompresses.", test16, sizeof test16, expected_test16, 
             sizeof expected_test16, sizeof test16},
     };
 
@@ -166,7 +173,9 @@ int main(int argc, char **argv) {
         }
 
         new_size = byte_compress(buff_copy, data_size);
-        printf("Post compressor: %zu bytes. This is a %.2f percent reduction in size.\n", new_size, (cases[i].buff_size ? (1 - (double) new_size /
+        printf("Post compressor: %zu bytes. This is a %.2f percent reduction"
+            "in size.\n", new_size, 
+            (cases[i].buff_size ? (1 - (double) new_size /
             (double) cases[i].buff_size) : 0) * 100);
         if (memcmp(buff_copy, cases[i].expected_compressed_buff, 
                 new_size) == 0) {
@@ -178,7 +187,7 @@ int main(int argc, char **argv) {
 
         final_size = byte_decompress(buff_copy, new_size, cases[i].buff_capacity);
         printf("Post decompressor: %zu bytes.\n",final_size);
-        
+
         if (final_size == data_size && 
             memcmp(buff_copy, cases[i].buff_ptr, data_size) == 0) {
             printf("Post decompressor buffer matches the original buffer.\n");
