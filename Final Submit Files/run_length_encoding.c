@@ -39,7 +39,7 @@ size_t byte_compress(
     // contained function. Preferably would be defined outside of the function.
     struct value_info {
     unsigned char value;
-    size_t count;  
+    unsigned char count;  
     };
     // Initial buffer checks to ensure it is operable
     if (buff_ptr == NULL) return buff_size;
@@ -128,9 +128,11 @@ size_t byte_decompress(
     size_t buff_size, 
     size_t buff_capacity
 ) {
+    // Struct definition is left in function in case testing requires a self 
+    // contained function. Preferably would be defined outside of the function.
     struct value_info {
     unsigned char value;
-    size_t count;
+    unsigned char count;
     };
 
     // Initial buffer checks to ensure it is operable
