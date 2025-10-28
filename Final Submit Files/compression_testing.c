@@ -174,7 +174,7 @@ int main(int argc, char **argv) {
 
         new_size = byte_compress(buff_copy, data_size);
         printf("Post compressor: %zu bytes. This is a %.2f percent reduction"
-            "in size.\n", new_size, 
+            " in size.\n", new_size, 
             (cases[i].buff_size ? (1 - (double) new_size /
             (double) cases[i].buff_size) : 0) * 100);
         if (memcmp(buff_copy, cases[i].expected_compressed_buff, 
